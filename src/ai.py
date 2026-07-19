@@ -116,7 +116,7 @@ class AIAnalyzer:
                 msg = str(e)
                 if any(x in msg for x in ["429", "404", "quota", "rate",
                                           "NOT_FOUND", "RESOURCE_EXHAUSTED", "not found"]):
-                    print(f"⚠️ {modelo} indisponível, tentando o próximo...")
+                    print(f"{modelo} indisponível, tentando o próximo...")
                     continue
                 break
         raise ultimo or RuntimeError("Nenhum modelo respondeu.")
@@ -151,7 +151,7 @@ class AIAnalyzer:
         try:
             texto_bruto = self._chamar_modelo(prompt)
         except Exception as e:
-            print(f"⚠️ IA indisponível, usando fallback: {e}")
+            print(f"IA indisponível, usando fallback: {e}")
             return self._fallback(vencedor, f"IA indisponível ({e.__class__.__name__})")
 
         parsed = self._extrair_json(texto_bruto)
@@ -174,7 +174,7 @@ class AIAnalyzer:
     def formatar_resposta(self, dados):
         motivos = "\n".join(f"• {m}" for m in dados.get("motivos", [])) or "• Não especificado"
         riscos = "\n".join(f"• {r}" for r in dados.get("riscos", [])) or "• Não especificado"
-        return f"""🏆 RECOMENDAÇÃO DA IA
+        return f"""RECOMENDAÇÃO DA IA
 
 Grupo Recomendado: {dados.get('grupo_recomendado', 'N/A')}
 Nível de Confiança: {dados.get('confianca', 'N/A')}

@@ -85,11 +85,11 @@ class Report:
 <style>
 body{{font-family:Arial;margin:40px;background:#F5F5F5;}}
 .container{{background:white;padding:30px;border-radius:10px;box-shadow:0 0 8px #CCC;}}
-h1{{color:#00695C;}}
-h2{{color:#00796B;border-bottom:1px solid #DDD;padding-bottom:5px;}}
+h1{{color:#FD9CBF;}}
+h2{{color:#FD9CBF;border-bottom:1px solid #DDD;padding-bottom:5px;}}
 pre{{background:#EFEFEF;padding:15px;border-radius:5px;white-space:pre-wrap;}}
-.veredito{{background:#E8F5E9;border-left:5px solid #2E7D32;padding:12px;border-radius:5px;}}
-.risco{{background:#FFF3E0;border-left:5px solid #EF6C00;padding:12px;border-radius:5px;}}
+.veredito{{background:#FD9CBF;border-left:5px solid #FD9CBF;padding:12px;border-radius:5px;}}
+.risco{{background:#FFF3E0;border-left:5px solid #FD9CBF;padding:12px;border-radius:5px;}}
 </style>
 </head>
 <body>

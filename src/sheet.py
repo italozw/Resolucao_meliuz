@@ -12,9 +12,7 @@ from datetime import datetime
 class Sheet:
 
     def __init__(self):
-
         self.pasta = "reports"
-
         if not os.path.exists(self.pasta):
             os.makedirs(self.pasta)
 
@@ -22,17 +20,9 @@ class Sheet:
             self.pasta,
             "historico.csv"
         )
-
         self.criar_planilha()
 
-    # -------------------------------------------------------
-
     def criar_planilha(self):
-
-        """
-        Cria o arquivo caso ele não exista.
-        """
-
         if os.path.exists(self.arquivo):
             return
 
@@ -40,11 +30,9 @@ class Sheet:
             self.arquivo,
             "w",
             newline="",
-            encoding="utf-8"
+            encoding="utf-8-sig"          # BOM: Excel lê acentos certo
         ) as csvfile:
-
-            writer = csv.writer(csvfile)
-
+            writer = csv.writer(csvfile, delimiter=";")   # ; = separador do Excel pt-BR
             writer.writerow([
                 "Data",
                 "Parceiro",
@@ -57,69 +45,33 @@ class Sheet:
                 "Relatório"
             ])
 
-    # -------------------------------------------------------
-
-    def salvar(
-        self,
-        parceiro,
-        grupo,
-        dados,
-        relatorio
-    ):
-
-        """
-        Registra uma nova análise.
-        """
-
+    def salvar(self, parceiro, grupo, dados, relatorio):
         with open(
             self.arquivo,
             "a",
             newline="",
-            encoding="utf-8"
+            encoding="utf-8-sig"
         ) as csvfile:
-
-            writer = csv.writer(csvfile)
-
+            writer = csv.writer(csvfile, delimiter=";")
             writer.writerow([
-
                 datetime.now().strftime("%d/%m/%Y %H:%M"),
-
                 parceiro,
-
                 grupo,
-
-                f"{dados['gmv']:.2f}",
-
-                f"{dados['cashback']:.2f}",
-
-                f"{dados['comissao']:.2f}",
-
-                f"{dados['receita']:.2f}",
-
-                f"{dados['ticket_medio']:.2f}",
-
+                f"{dados.get('gmv', 0):.2f}",
+                f"{dados.get('cashback', 0):.2f}",
+                f"{dados.get('comissao', 0):.2f}",
+                f"{dados.get('receita', 0):.2f}",
+                f"{dados.get('ticket_medio', 0):.2f}",
                 relatorio
-
             ])
 
-    # -------------------------------------------------------
-
     def listar(self):
-
-        """
-        Retorna todo o histórico.
-        """
-
         historico = []
-
         with open(
             self.arquivo,
-            encoding="utf-8"
+            encoding="utf-8-sig"
         ) as csvfile:
-
-            leitor = csv.DictReader(csvfile)
-
+            leitor = csv.DictReader(csvfile, delimiter=";")   # mesmo separador na leitura
             for linha in leitor:
                 historico.append(linha)
-
         return historico
