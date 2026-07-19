@@ -12,6 +12,7 @@ from tkinter import messagebox
 from src.csv_reader import CSVReader
 from src.analyzer import Analyzer
 from src.ai import AIAnalyzer
+from src.report import Report
 import os
 
 class App:
@@ -293,14 +294,28 @@ Balanceamento:
         if dados_ia.get("_texto_livre"):
             texto_final += f"\n\n--- Resposta bruta da IA ---\n{dados_ia['_texto_livre']}"
 
+        self.progress["value"] = 95
+        self.log("Gerando arquivos de relatório...")
+
+        report = Report()
+        caminhos = report.gerar(
+            parceiro=self.leitor.parceiro(),  
+            resumo_metricas=texto_resumo,     
+            dados_ia=dados_ia,                 
+        )
+
+        self.log(f"✅ Markdown salvo: {caminhos['markdown']}")
+        self.log(f"✅ HTML salvo:     {caminhos['html']}")
+
         self.progress["value"] = 100
-        self.resultado.delete("1.0", tk.END)
-        self.resultado.insert(tk.END, texto_final)
-        self.log("Processo finalizado.")
 
         if not texto_final or texto_final.strip() == "":
             self.resultado.delete("1.0", tk.END)
             self.resultado.insert(tk.END, "Nenhuma análise recebida. Verifique a chave API ou a conexão.")
+
+        self.resultado.delete("1.0", tk.END)
+        self.resultado.insert(tk.END, texto_final)
+        self.log("Processo finalizado.")
             
 
     def log(self, texto):
