@@ -1,7 +1,7 @@
 # Relatório de Teste A/B
 
 **Parceiro:** dataset_01_parceiroA.csv
-**Data da análise:** 19/07/2026 15:32
+**Data da análise:** 19/07/2026 15:42
 **Grupo recomendado pela IA:** Grupo 3
 **Nível de confiança:** Alta
 
@@ -44,7 +44,7 @@ O Grupo 3 apresentou o melhor desempenho em termos de GMV e comissão, mas reque
 
 ### Riscos / Pontos de atenção
 - Cashback mais alto (R$ 503,600.00) pode afetar a rentabilidade
-- Ticket médio semelhante ao do Grupo 2 pode indicar limitações no crescimento
+- Ticket médio semelhante ao Grupo 2 pode indicar limitações no crescimento
 
 ---
 Relatório gerado automaticamente pelo sistema.

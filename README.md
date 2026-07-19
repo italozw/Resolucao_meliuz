@@ -30,7 +30,7 @@ Este projeto resolve o **Case Técnico — Estágio Ops Integradas Méliuz**: co
 | Abordagem Tradicional | Este Projeto |
 |------------------------|---------------|
 | Analista abre CSV no Excel e calcula manualmente | Sistema lê, normaliza, valida automaticamente |
-| ChatGPT "bate-papo" solta sem estrutura | **IA retorna JSON estruturado**: `grupo_recomendado`, `confiança`, `motivos`, `riscos` |
+| ChatGPT "bate-papo" solta sem estrutura | **IA retorna estruturado**: `grupo_recomendado`, `confiança`, `motivos`, `riscos` |
 | Planilha única desorganizada | **Histórico consolidado** em `historico.csv` + relatórios HTML individuais |
 | Código "one-off" que só serve para uma base | **Reutilizável para Parceiro A, B, C...** sem alterar Python |
 
@@ -58,48 +58,48 @@ Este projeto resolve o **Case Técnico — Estágio Ops Integradas Méliuz**: co
 ├─────────────────────────────────────┤
 │ Arquivo: [dataset_01_parceiroA.csv]│ ← Clique em Selecionar
 │                                     │
-┌─────────────────────────────────┐    │
-│ RESUMO                           │    │
-│ • Registro: 12,456                │    │
-│ • Grupos: 3 (A, B, C)            │    │
-│ • Balanceamento: OK               │    │
-└─────────────────────────────────┘    │
-│     [🚀 Iniciar Análise]           │    │
-│ ████████████████████░░░░ 100%   │    │
+┌─────────────────────────────────┐   │
+│ RESUMO                          │   │
+│ • Registro: 12,456              │   │
+│ • Grupos: 3 (A, B, C)           │   │
+│ • Balanceamento: OK             │   │
+└─────────────────────────────────┘   │
+│     [ Iniciar Análise]            │
+│ ████████████████████░░░░ 100%       │
 └─────────────────────────────────────┘
 ┌─────────────────────────────────────┐
-│ STATUS                             │
-│ ✔ Lendo arquivo CSV                 │
-✔ Calculando métricas...           │
-✔ Consultando IA (Groq)...          │
-✔ Gerando relatório...              │
-✔ Salvando histórico...             │
+│ STATUS                              │
+│ ✔ Lendo arquivo CSV                │
+✔ Calculando métricas...             │
+✔ Consultando IA (Groq)...           │
+✔ Gerando relatório...               │
+✔ Salvando histórico...              │
 └─────────────────────────────────────┘
 ┌─────────────────────────────────────┐
-│ RESULTADO DA IA                    │
+│ RESULTADO DA IA                     │
 │                                     │
-│ 🏆 GRUPO RECOMENDADO: Grupo 3      │
-│ NÍVEL DE CONFIANÇA: Alta           │
+│  GRUPO RECOMENDADO: Grupo 3       │
+│ NÍVEL DE CONFIANÇA: Alta            │
 │                                     │
-│ MOTIVOS:                           │
-│ • Maior GMV (R$ 6.7M vs R$ 4.5M)   │
+│ MOTIVOS:                            │
+│ • Maior GMV (R$ 6.7M vs R$ 4.5M)    │
 │ • Ticket médio mais saudável        │
-│ • Cashback proporcional menor      │
+│ • Cashback proporcional menor       │
 │                                     │
-│ RISCOS:                            │
-│ • Diferença marginal em curto prazo  │
+│ RISCOS:                             │
+│ • Diferença marginal em curto prazo │
 │ ─────────────────────────────────── │
-│ RESUMO ESTRATÉGICO:                │
+│ RESUMO ESTRATÉGICO:                 │
 │ Escalar Grupo 3 gradualmente (20%   │
 │ -> 50% -> 100%). Monitorar churn.   │
 │                                     │
-│ [📄 Abrir Relatório] [🧹 Limpar]     │
+│ [📄 Abrir Relatório] [Limpar]       │
 └─────────────────────────────────────┘
 ```
 
 ---
 
-## 🏗️ Arquitetura
+## Arquitetura
 
 ```
 meliuz-ab-analyzer/
@@ -130,51 +130,17 @@ meliuz-ab-analyzer/
 │   │   └── dataset_03_parceiroC.csv # Entrade: teste C/C Parceiro C
 │   └── logo.png
 │
-├── .env                              # ⚠️ CONFIGURAÇÃO SENSÍVEL (não versione no Git!)
+├── .env                              # CONFIGURAÇÃO SENSÍVEL (está no ignore por conta da key)
 ├── requirements.txt                  # Dependências Python
-├── LICENSE                           # Licença MIT/Apache 2.0
+├── LICENSE                           # Licença MIT
 └── README.md                         # Este arquivo
 ```
-
-### Diagrama de fluxo de dados:
-
-```mermaid
-flowchart LR
-    A[Usuário seleciona CSV] --> B[csv_reader.py]
-    B --> C{Schema variável?}
-    C -->|Sim| D[Normaliza colunas]
-    
-    D --> E[analyzer.py]
-    E --> F[Calcula GMV/Vendas/Cashback por grupo]
-    F --> G{Identifica vencedor}
-    
-    G --> H[ai.py - Prompt personalizado]
-    H --> I{Provider disponível?}
-    I -->|Groq| J[Llama 3 - Gratuito]
-    I -->|Gemini| K[Gemini Flash]
-    I -->|Ollama| L[Local - Sem internet]
-    
-    J --> M[JSON estruturado]
-    K --> M
-    
-    M --> N[report.py]
-    N --> O[HTML + MD files]
-    
-    M --> P[sheet.py]
-    P --> Q[historico.csv atualizado]
-    
-    O --> R[Tkinter Interface]
-    Q --> R
-    R --> S[Abrir relatório no navegador]
-```
-
----
 
 ## ✨ Funcionalidades Principais
 
 ### Para o Gestor (Visual)
 - [x] **Interface gráfica intuitiva** (Tkinter responsivo, scroll automático)
-- [x] **Relatório HTML profissional** com cores semânticas (verde=vitória, laranja=risco)
+- [x] **Relatório HTML** com cores semânticas (verde=vitória, laranja=risco)
 - [x] **Botão one-click** "Abrir Relatório" abre HTML no navegador padrão
 - [x] **Clear button** limpa tudo para nova análise
 
@@ -182,13 +148,13 @@ flowchart LR
 - [x] **Leitura automática de schemas** variados (detecta colunas pelo nome, não posição fixa)
 - [x] **Validação de dados** (balanceamento <60%, amostra mínima, colunas obrigatórias)
 - [x] **Fallback robusto** se IA falha (quota/erro): auto-analisa pelo GMV puro nunca trava a UI
-- [x] **Multi-provider** suportado: Groq (gratis), Gemini, Ollama local
+- [x] **Multi-provedor/provider** suportado: Groq (gratis), Gemini, Ollama local
 
 ### Para a Arquitetura do Software
-- [x] **Separation of Concerns** cada módulo tem uma única responsabilidade
-- [x] **Open-Closed Principle** novos dados/sem alterar código (via prompt.md e .csv externo)
-- [x] **Fail-safe** try/except global com tratamento específico por tipo de erro
-- [x] **Extensível** fácil adicionar novo provider (basta 15 linhas)
+- [x] Cada módulo tem uma única responsabilidade
+- [x] Novos dados/sem alterar código (via prompt.md e .csv externo)
+- [x] Try/except global com tratamento específico por tipo de erro
+- [x] Fácil adicionar novo provider (basta 15 linhas)
 
 ---
 
@@ -196,15 +162,15 @@ flowchart LR
 
 ### Pré-requisitos
 - Python >= 3.9 (testado até 3.13)
-- Windows / Linux / macOS
+- Windows / Linux / macOS - Testado apenas em Windows
 - Conexão internet (para IA na nuvem)
-
+- API KEY da groq - gratuito - criar .env e colocar o que está no example
 ### Passo-a-passo
 
 ```bash
 # 1. Clone/download do repo
 git clone https://github.com/seu-usuario/meliuz-ab-analyzer.git
-cd meliuz-ab-analyzer
+cd Resolucao_meliuz
 
 # 2. Criar ambiente virtual (recomendado)
 python -m venv venv
@@ -212,8 +178,6 @@ source venv/bin/activate  # Linux/Mac
 # venv\Scripts\activate     # Windows
 
 # 3. Instalar dependências
-pip install -r requirements.txt
-# Ou se preferir instalacao direta:
 pip install tkinter python-dotenv google-generativeai groq openpyxl
 
 # 4. Configurar API de IA (escolha UM abaixo):
@@ -256,18 +220,6 @@ python main.py
 - ✅ `reports/historico.csv` (linha adicionada com decisão)
 - ✅ Caixa "Resultado da IA" preenchida com análise detalhada
 
-### Uso Avançado
-
-#### Trocar modelo de IA
-
-Edite `src/ai.py`, linha ~25:
-```python
-# Antes:
-ai = AIAnalyzer(provider="groq")     # Usa Llama 3 (grátis)
-
-# Depois (se tiver Google key):
-ai = AIAnalyzer(provider="gemini")  # Usa Gemini Flash
-```
 
 #### Alterar critérios de decisão da IA
 
@@ -340,15 +292,6 @@ ESTILO:
 
 Ao salvar, próxima análise seguirá essas novas regras.
 
-### Alterar métricas calculadas
-
-Em `src/analyzer.py`, método `localizar_colunas()`, adicione mapeamentos:
-```python
-elif "roi" in nome or "retorno" in nome:
-    self.colunas["roi"] = coluna
-```
-Em seguida use no cálculo. O sistema calculará ROI automaticamente.
-
 ### Adicionar novo provider de IA
 
 1. Em `src/ai.py`, dentro do `__init__()`:
@@ -364,7 +307,7 @@ elif provider == "openai":
 ai = AIAnalyzer(provider="openai")
 ```
 
-**Total:** 15 linhas de código. Demonstra extensibilidade.
+**Total:** 15 linhas de código.
 
 ---
 
@@ -409,7 +352,7 @@ Estas informações podem ser importadas diretamente em:
 ### Problema: Interface aparece mas botão "Iniciar" não faz nada
 **Causa:** Arquivo .env não configurado  
 **Verificação:** Verificar logs no console/terminal  
-**Resolução:** Confirmar `GROQ_API_KEY` ou `GEMINI_API_KEY` está definido no raiz
+**Resolução:** Confirmar `GROQ_API_KEY` ou `GEMINI_API_KEY` está definido no raiz opte pelo `GROQ_API_KEY` já validado é visivelmente mais veloz.
 
 ### Problema: "Usuários: 0" no resumo
 **Causa:** Nome da coluna diferente ("Compradores" vs "usuarios")  
@@ -420,7 +363,7 @@ Estas informações podem ser importadas diretamente em:
 **Resolução:** 
 1. Esperar 1 minuto (refresh) OU
 2. Trocar provider (ex: Groq se Gemini cheio) OR
-3. Usar `self.modelos[1]` como fallback (já implementado)
+3. Usar `self.modelos[1]` como fallback (já implementado) 
 
 ### Problema: Relatório abre bagunçado no Excel
 **Causa:** Separador CSV padrão `;` não reconhecido automaticamente  
@@ -442,14 +385,12 @@ Estas informações podem ser importadas diretamente em:
 - [ ] **Histórico consolidado**
 - [x] Fallback automático (GMV puro se IA falhar)
 
-### v1.1 - Planejado
+### Melhorias futuras com tempo
 - [ ] Dashboard comparativo lado a lado (Grupo A x B x C visualmente)
 - [ ] Exportação em PDF (via weasyprint)
 - [ ] Persistência SQLite para dashboard histórico longo-prazo
 - [ ] Validação estatística automática (p-value, confidence interval, SRM detection)
 - [ ] Sistema de alertas (slack/email) quando anomalia detectada
-
-### v2.0 - Visionária
 - [ ] Plug-in system: extensões de análise (clv, ltv, cohort retention)
 - [ ] Scheduler: análisis automático todos os dias às 08:00
 - [ ] Multi-language support (EN/ES/PT-BR automático baseado no locale do usuário)
@@ -461,7 +402,7 @@ Estas informações podem ser importadas diretamente em:
 
 1. **Formato de entrada:** Atualmente exige CSV clássico. Futuras versões podem aceitar parquet/jsonl diretamente
 2. **Escalabilidade de UI:** Tkinter processa tudo na thread principal. Para bases muito grandes (>100k linhas), recomendamos threading
-3. **Validação Estatística:** Não implementa teste t-student ou Chi-square automaticamente. Relia puramente no GMV absoluto
+3. **Validação Estatística:** Não implementa teste t-student ou Chi-square automaticamente. Recria puramente no GMV absoluto
 4. **Persistência:** Histórico atual é CSV (append-only). Para produção enterprise, recomenda-se banco de dados
 5. **Concorrência:** Se dois usuários usarem simultaneamente, podem haver escritas duplicadas no histórico (file lock recomendado)
 
