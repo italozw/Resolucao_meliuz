@@ -26,7 +26,7 @@ não escreva nada antes ou depois. Use exatamente estas chaves:
 
 
 class AIAnalyzer:
-    def __init__(self, api_key=None, prompt_file="prompt.md", provider="groq"):
+    def __init__(self, api_key=None, prompt_file="prompt.md", provider="ollama"):
         self.provider = provider
 
         base_dir = os.path.dirname(os.path.abspath(__file__))    
