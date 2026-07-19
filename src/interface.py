@@ -11,6 +11,7 @@ from tkinter import scrolledtext
 from tkinter import messagebox
 from src.csv_reader import CSVReader
 from src.analyzer import Analyzer
+from src.ai import AIAnalyzer
 import os
 
 class App:
@@ -21,8 +22,8 @@ class App:
 
         self.root = tk.Tk()
         self.root.title("Méliuz - A/B Teste de Analise")
-        self.root.geometry("900x650")
-        self.root.resizable(False, False)
+        self.root.geometry("900x780")
+        self.root.resizable(True, True)
 
         self.criar_componentes()
 
@@ -75,7 +76,7 @@ class App:
         self.label_resumo = scrolledtext.ScrolledText(
             resumo,
             font=("Arial", 10),
-            height=8,       
+            height=6,       
             wrap=tk.WORD      
         )
         self.label_resumo.pack(
@@ -130,7 +131,7 @@ Grupos:
 
         self.status = scrolledtext.ScrolledText(
             frame_status,
-            height=8
+            height=5
         )
         self.status.pack(
             fill="both",
@@ -282,20 +283,25 @@ Balanceamento:
         self.label_resumo.config(state="disabled") 
 
         self.progress["value"] = 60
-        self.log("Consultando IA...")
+        self.log("Consultando IA (Groq)...")
 
-        # TODO: ai.py (futuramente substitui o texto abaixo)
+        ai = AIAnalyzer(provider="groq")       
+        dados_ia = ai.analisar(resultado, vencedor)   
+        self.dados_ia = dados_ia                
 
-        self.progress["value"] = 90
-        self.log("Gerando relatório...")
+        texto_final = ai.formatar_resposta(dados_ia)
+        if dados_ia.get("_texto_livre"):
+            texto_final += f"\n\n--- Resposta bruta da IA ---\n{dados_ia['_texto_livre']}"
 
         self.progress["value"] = 100
-
-        # Mostra o resumo real na caixa de resultado
         self.resultado.delete("1.0", tk.END)
-        self.resultado.insert(tk.END, texto_ia)
-
+        self.resultado.insert(tk.END, texto_final)
         self.log("Processo finalizado.")
+
+        if not texto_final or texto_final.strip() == "":
+            self.resultado.delete("1.0", tk.END)
+            self.resultado.insert(tk.END, "Nenhuma análise recebida. Verifique a chave API ou a conexão.")
+            
 
     def log(self, texto):
         self.status.insert(
